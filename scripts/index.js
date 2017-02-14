@@ -1,9 +1,8 @@
 var myBtn = document.getElementById('myButton');
-
-var shape = document.querySelector('.shape');
+var clearBtn = document.getElementById('clearAll');
+var shape = document.querySelector('.shape-container');
 var shapeTextDiv = document.querySelector('.shapeText');
 var textBox = document.querySelector('#txtJob');
-
 
 function updateText() {
     shapeTextDiv.innerHTML = this.value
@@ -21,7 +20,12 @@ function toggleShape() {
     }
 }
 
-myBtn.addEventListener('click', toggleShape);
+function clearAll() {
+    shape.style.display = 'none';
+    textBox.value = '';
+}
 
+myBtn.addEventListener('click', toggleShape);
+clearBtn.addEventListener('click', clearAll);
 textBox.addEventListener('change', updateText);
 textBox.addEventListener('keyup', updateText);

@@ -5,6 +5,10 @@ body {
     flex-wrap: wrap;
 }
 
+.shape-container {
+    display: none;
+}
+
 .shape {
     border: 1px solid red;
     border-radius: 20%;
