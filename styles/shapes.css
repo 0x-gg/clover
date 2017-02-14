@@ -1,16 +1,19 @@
 body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    /*flex-wrap: wrap;*/
 }
 
 .shape-container {
     display: none;
+    /*position: absolute;*/
 }
 
 .shape {
     border: 1px solid red;
+    /*background-color: #43b02a;*/
+    /*opacity: .4;*/
     border-radius: 20%;
     width: 20vw;
     height: 20vw;
