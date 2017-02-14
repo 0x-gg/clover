@@ -25,7 +25,16 @@ function clearAll() {
     textBox.value = '';
 }
 
+function alertUser() {
+    let innerShape = document.querySelector('.shape');
+    let innerText = document.querySelector('.shapeText');
+    let rbgColor = window.getComputedStyle(innerShape).borderColor;
+    let alertMessage = 'Color: ' + rbgColor + '\n' + 'Text: ' + innerText.innerHTML;
+    window.alert(alertMessage);
+}
+
 myBtn.addEventListener('click', toggleShape);
 clearBtn.addEventListener('click', clearAll);
 textBox.addEventListener('change', updateText);
 textBox.addEventListener('keyup', updateText);
+shape.addEventListener('click', alertUser);
