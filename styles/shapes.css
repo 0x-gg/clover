@@ -11,7 +11,7 @@ body {
 }
 
 .shape {
-    border: 1px solid red;
+    border: 1px solid;
     /*background-color: #43b02a;*/
     /*opacity: .4;*/
     border-radius: 20%;
@@ -26,3 +26,15 @@ body {
 .shapeTextDiv {
     /**/
 }
+
+.boxy-thing {
+    /*width: 20vw;*/
+    /*height: 20vw;*/
+    border: 1px solid;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.boxy-text {}

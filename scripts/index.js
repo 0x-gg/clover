@@ -5,8 +5,34 @@ var shapeTextDiv = document.querySelector('.shapeText');
 var textBox = document.querySelector('#txtJob');
 var randomMove = document.querySelector('#randomMove');
 
+var bodyObj = document.querySelector('body');
+
+
+function createBox() {
+    let newBox = document.createElement('div');
+    let textContainer = document.createElement('div');
+    textContainer.className = 'boxy-text';
+    let boxAttr = genRandomAttr();
+    newBox.className = 'boxy-thing';
+    newBox.style.borderColor = getRandomColor();
+    newBox.style.position = 'absolute';
+    newBox.style.left = boxAttr.shift() + 'px';
+    newBox.style.top = boxAttr.shift() + 'px';
+    newBox.style.borderColor = boxAttr.shift();
+    newBox.style.width = boxAttr.shift() + 'px';
+    newBox.style.height = newBox.style.width;
+    newBox.style.borderRadius = Math.floor(Math.random() * 40) + '%';
+    // newBox.style.display = 'block';
+    bodyObj.appendChild(newBox);
+    newBox.appendChild(textContainer);
+    textContainer.innerHTML = textBox.value;
+    newBox.addEventListener('click', alertUser);
+}
+
 function updateText() {
-    shapeTextDiv.innerHTML = this.value
+    // shapeTextDiv.innerHTML = this.value
+    let boxes = document.querySelectorAll('.boxy-text');
+    boxes.forEach(b => b.innerHTML = this.value);
 }
 
 function getParameterByName(name, url) {
@@ -33,31 +59,39 @@ function getRandomColor() {
     return color;
 }
 
+function genRandomAttr() {
+    let w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    let h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+    let pixelWidth;
+    w > h ? pixelWidth = Math.floor(Math.random() * h) : pixelWidth = Math.floor(Math.random() * w);
+    let posX = Math.floor(w * Math.random());
+    let posY = Math.floor(h * Math.random());
+    console.log("before: ", w, h, posX, posY, pixelWidth);
+    if (posX + pixelWidth >= w) posX -= pixelWidth - (w - posX);
+    if (posY + pixelWidth >= h) posY -= pixelWidth - (h - posY);
+    console.log("after: ", w, h, posX, posY, pixelWidth);
+
+    let letters = '0123456789ABCDEF';
+    let color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return [posX, posY, color, pixelWidth];
+}
+
 function toggleShape() {
     if (isElementHidden(shape)) {
-        // added random border-radius and color
         let innerShape = document.querySelector('.shape');
         let shape = document.querySelector('.shape-container');
         innerShape.style.borderColor = getRandomColor();
         let randomRadius = Math.random() * 50;
         innerShape.style.borderRadius = randomRadius + '%';
-        // shape.position = 'absolute';
-        let w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-        let h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        console.log(Math.floor(h * Math.random()) + ' px');
-
-        let posX = Math.floor(w * Math.random());
-        let posY = Math.floor(h * Math.random());
-        let boxWidth = 0.20 * w; // as it is set to 20vw in css
-        console.log(boxWidth);
-        if (posX >= w - boxWidth) posX -= boxWidth;
-        if (posY >= h - boxWidth) posY -= boxWidth;
-
+        // let boxCoords = genRandomCoords();
+        console.log(boxCoords);
         shape.style.position = 'absolute';
-        shape.style.top = posY + 'px';
-        shape.style.left = posX + 'px';
+        shape.style.left = boxCoords.shift() + 'px';
+        shape.style.top = boxCoords.shift() + 'px';
         shape.style.display = 'block';
-        // console.log(getRandomColor());
 
         if (shapeColor !== 'none') {
             innerShape.style.backgroundColor = shapeColor;
@@ -73,28 +107,74 @@ function toggleShape() {
 }
 
 function clearAll() {
-    shape.style.display = 'none';
-    textBox.value = '';
+    let boxes = document.querySelectorAll('.boxy-thing');
+    boxes.forEach(b => b.style.display = 'none');
+    // shape.style.display = 'none';
+    // textBox.value = '';
 }
 
 
 
-function alertUser() {
-    let innerShape = document.querySelector('.shape');
-    let innerText = document.querySelector('.shapeText');
-    let rbgColor = window.getComputedStyle(innerShape).borderColor;
-    let alertMessage = 'Color: ' + rbgColor + '\n' + 'Text: ' + innerText.innerHTML;
+function alertUser(e) {
+    console.log(e);
+    let color = e.target.style["border-top-color"];
+    let text = e.target.firstChild.innerHTML;
+    let alertMessage = 'Color: ' + color + '\n' + 'Text: ' + text;
+    // console.log(alertMessage);
     window.alert(alertMessage);
 }
 
+var randomStarted = null;
+
 function startRandomMove() {
     // random movement every 10 milliseconds
-    setInterval(toggleShape, 10);
+    console.log(randomStarted);
+    if (randomStarted === null) {
+        randomStarted = setInterval(startMoving, 10);
+    } else {
+        window.clearInterval(randomStarted);
+        randomStarted = null;
+    }
 }
 
-myBtn.addEventListener('click', toggleShape);
+function startMoving() {
+    let boxes = document.querySelectorAll('.boxy-thing');
+    if (boxes === null) {
+        window.clearInterval(randomStarted);
+        randomStarted = null;
+    }
+    boxes.forEach(b => moveBox(b));
+}
+
+var tc = 1;
+var lc = 1;
+
+function moveBox(e) {
+    // console.log(b);
+    var top = parseInt(e.style.top);
+    var left = parseInt(e.style.left);
+    var width = parseInt(e.style.width);
+
+    let w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    let h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
+    // check boundary
+
+    if (top <= 0) tc = 1;
+    if (left <= 0) lc = 1;
+
+    if (left + width >= w) lc = -1;
+    if (top + width >= h) tc = -1;
+    console.log(tc, lc, top + tc + 'px');
+    e.style.top = top + tc + 'px';
+    e.style.left = left + lc + 'px';
+
+    return;
+}
+
+myBtn.addEventListener('click', createBox);
 randomMove.addEventListener('click', startRandomMove);
 clearBtn.addEventListener('click', clearAll);
 textBox.addEventListener('change', updateText);
 textBox.addEventListener('keyup', updateText);
-shape.addEventListener('click', alertUser);
+// shape.addEventListener('click', alertUser);
