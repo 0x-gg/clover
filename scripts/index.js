@@ -101,7 +101,7 @@ function genRandomAttr() {
     let w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
     let h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
     let pixelWidth;
-    w > h ? pixelWidth = Math.floor(Math.random() * h) : pixelWidth = Math.floor(Math.random() * w);
+    w > h ? pixelWidth = Math.floor(Math.random() * h / 2) : pixelWidth = Math.floor(Math.random() * w / 2);
     let posX = Math.floor(w * Math.random());
     let posY = Math.floor(h * Math.random());
     // console.log("before: ", w, h, posX, posY, pixelWidth);
