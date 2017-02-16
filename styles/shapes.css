@@ -3,6 +3,7 @@ body {
     /*align-items: center;*/
     /*justify-content: center;*/
     /*flex-wrap: wrap;*/
+    background-color: #000;
 }
 
 .shape-container {
@@ -35,8 +36,8 @@ body {
     justify-content: center;
     flex-wrap: wrap;
     align-items: center;
-    /*background-color: #43b02a;*/
-    background-color: rgba(67, 176, 42, 0.1);
+    background-color: #43b02a;
+    /*background-color: rgba(67, 176, 42, 0.1);*/
     /*opacity: .4;*/
 }
 

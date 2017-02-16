@@ -167,23 +167,23 @@ function moveBox(e) {
     let h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
     // check boundary
-
+    let speedFactor = 10;
     if (top <= 0) {
         // tc = 1;
-        idMap[e.id][1] = 1; //Y
+        idMap[e.id][1] = Math.floor(Math.random() * speedFactor);
     }
     if (left <= 0) {
         // lc = 1;
-        idMap[e.id][0] = 1; //X
+        idMap[e.id][0] = Math.floor(Math.random() * speedFactor);
     }
 
     if (left + width >= w) {
         // lc = -1;
-        idMap[e.id][0] = -1; //X
+        idMap[e.id][0] = -1 * Math.floor(Math.random() * speedFactor); //Y
     }
     if (top + width >= h) {
         // tc = -1;
-        idMap[e.id][1] = -1; //Y
+        idMap[e.id][1] = -1 * Math.floor(Math.random() * speedFactor); //Y
     }
 
     e.style.top = top + idMap[e.id][1] + 'px';
