@@ -38,7 +38,7 @@ if (boxes == null) {
 }
 
 function getRGBAColor(colorStr) {
-    if (colorStr === 'none') return 'none';
+    if (colorStr === 'none') return 'transparent';
     var a = document.createElement('div');
     a.style.color = colorStr;
     var colors = window.getComputedStyle(document.body.appendChild(a)).color;
