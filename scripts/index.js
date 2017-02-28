@@ -6,6 +6,8 @@ var textBox = document.querySelector('#txtJob');
 var randomMove = document.querySelector('#randomMove');
 
 var bodyObj = document.querySelector('body');
+var stateMouseDown = false;
+var currentBox, boxXOffset, boxYOffset;
 
 var idArr = [];
 var idMap = {};
@@ -46,20 +48,71 @@ function getRGBAColor(colorStr) {
     return colors.replace(/\)/, ', 0.1)').replace('rgb', 'rgba');
 }
 
+
+function getTextBoxContent() {
+    return textBox.value;
+}
+
+function getMinWidth() {
+    let dummyDiv = document.getElementById("text-width-calc");
+    let content = getTextBoxContent();
+    dummyDiv.innerHTML = content;
+    return dummyDiv.clientWidth;
+}
+
+function eleMouseDown(e) {
+    mouseDownFlag = true;
+    document.addEventListener("mousemove", eleMouseMove, false);
+}
+
+
+function eleMouseDown(e) {
+    stateMouseDown = true;
+    document.addEventListener("mousemove", eleMouseMove, false);
+    // console.log(e.target.id);
+    currentBox = document.querySelector("#" + e.target.id);
+    boxXOffset = e.layerX;
+    boxYOffset = e.layerY;
+}
+
+function eleMouseMove(ev) {
+    // console.log(ev);
+    var pX = ev.clientX - boxXOffset;
+    var pY = ev.clientY - boxYOffset;
+    currentBox.style.left = pX + "px";
+    currentBox.style.top = pY + "px";
+    document.addEventListener("mouseup", eleMouseUp, false);
+}
+
+function eleMouseUp() {
+    document.removeEventListener("mousemove", eleMouseMove, false);
+    document.removeEventListener("mouseup", eleMouseUp, false);
+}
+
 function createBox() {
     let newBox = document.createElement('div');
     let textContainer = document.createElement('div');
+
     textContainer.className = 'boxy-text';
     let boxAttr = genRandomAttr();
+    let minBoxWidth = getMinWidth();
     newBox.className = 'boxy-thing';
     newBox.style.borderColor = getRandomColor();
     newBox.style.position = 'absolute';
     newBox.style.left = boxAttr.shift() + 'px';
     newBox.style.top = boxAttr.shift() + 'px';
     newBox.style.borderColor = boxAttr.shift();
-    newBox.style.width = boxAttr.shift() + 'px';
+    let randomWidth = boxAttr.shift();
+    // console.log(randomWidth, minBoxWidth);
+    if (randomWidth < minBoxWidth) {
+        newBox.style.width = minBoxWidth + 'px';
+    } else {
+        newBox.style.width = randomWidth + 'px';
+    }
+    // newBox.style.width = boxAttr.shift() + 'px';
     newBox.style.height = newBox.style.width;
     newBox.style.borderRadius = Math.floor(Math.random() * 40) + '%';
+    // newBox.innerHTML = inputVal;
     let newID = idArr.length;
     idArr.push(newID + 1);
     idMap["box-" + (newID + 1)] = [1, 1];
@@ -72,7 +125,9 @@ function createBox() {
     if (shapeColor !== null) {
         newBox.style.backgroundColor = getRGBAColor(shapeColor);
     }
-    newBox.addEventListener('click', alertUser);
+    // removing this for drag and drop
+    // newBox.addEventListener('click', alertUser);
+    newBox.addEventListener('mousedown', eleMouseDown);
 }
 
 console.log(boxes);
@@ -86,6 +141,7 @@ function updateText() {
     // shapeTextDiv.innerHTML = this.value
     let boxes = document.querySelectorAll('.boxy-text');
     boxes.forEach(b => b.innerHTML = this.value);
+    // introduce logic to determine just the new shapes
 }
 
 function getRandomColor() {
@@ -137,7 +193,7 @@ var randomStarted = null;
 
 function startRandomMove() {
     // random movement every 10 milliseconds
-    console.log(randomStarted);
+    // console.log(randomStarted);
     if (randomStarted === null) {
         randomStarted = setInterval(startMoving, 10);
     } else {
@@ -194,9 +250,13 @@ function toggleP(e) {
     if (document.activeElement.id !== 'txtJob' && e.keyCode == 80) startRandomMove();
 }
 
+
+
+getTextBoxContent();
+
 myBtn.addEventListener('click', createBox);
 randomMove.addEventListener('click', startRandomMove);
 clearBtn.addEventListener('click', clearAll);
-textBox.addEventListener('change', updateText);
-textBox.addEventListener('keyup', updateText);
+// textBox.addEventListener('change', updateText);
+// textBox.addEventListener('keyup', updateText);
 window.addEventListener('keydown', toggleP);

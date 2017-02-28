@@ -6,6 +6,16 @@ body {
     /*background-color: #000;*/
 }
 
+#text-width-calc {
+    position: absolute;
+    visibility: hidden;
+    /*display: none;*/
+    height: auto;
+    width: auto;
+    white-space: nowrap;
+    /* Thanks to Herb Caudill comment */
+}
+
 .shape-container {
     display: none;
     /*position: absolute;*/
@@ -33,11 +43,13 @@ body {
     /*height: 20vw;*/
     border: 2px solid;
     display: flex;
+    padding: 1%;
     justify-content: center;
     flex-wrap: wrap;
     align-items: center;
     /*background-color: #43b02a;*/
     background-color: rgba(67, 176, 42, 0.1);
+    /*overflow: hidden;*/
     /*opacity: .4;*/
 }
 
